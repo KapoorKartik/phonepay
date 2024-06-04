@@ -74,8 +74,9 @@ function addPaymentData($data, $reciptId ,$orderId) {
     $address = $data['address'];
     $pincode = $data['pincode'];
     $state = $data['state'];
-    $sql = "INSERT INTO payment_data (name, mobile, email, address, pincode, state, amount, order_id,receipt_id) 
-            VALUES ('$name', '$mobile', '$email', '$address', '$pincode', '$state', '$amount' , '$orderId' , '$reciptId' )";
+    $product = $data['product'];
+    $sql = "INSERT INTO payment_data (name, mobile, email, address, pincode, state, amount, order_id,receipt_id,product) 
+            VALUES ('$name', '$mobile', '$email', '$address', '$pincode', '$state', '$amount' , '$orderId' , '$reciptId' , '$product')";
 
     // Execute the query using executeQuery function
     $result = executeQuery($sql);
@@ -109,6 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $idAddedToDb = addPaymentData($data,$reciptId,$res['orderId']);
     // print_r($idAddedToDb);
     // if ($idAddedToDb === TRUE){
+        $res['email'] = $data['email'];
         echo json_encode($res);
     // }else {
         // echo json_encode($idAddedToDb);
