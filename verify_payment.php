@@ -7,7 +7,7 @@ require('C:/xampp/htdocs/phonepay/razorpay-php-2.9.0/Razorpay.php'); // Adjust t
 use Razorpay\Api\Api;
 
 $apiKey = 'rzp_live_Mve4wgbJgNAKwD'; // Replace with your Razorpay Key ID
-$apiSecret = 'Z1bjRBa2hy721Y1A1yDLUwot'; // Replace with your Razorpay Key Secret
+$apiSecret = ''; // Replace with your Razorpay Key Secret
 
 // Create an instance of the Razorpay API
 $api = new Api($apiKey, $apiSecret);

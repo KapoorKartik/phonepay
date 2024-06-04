@@ -35,7 +35,7 @@ function executeQuery($sql_query) {
 
 function sendOrderDetails($orderData,$mobile){
     $apiKey = 'rzp_live_Mve4wgbJgNAKwD'; 
-    $apiSecret = 'Z1bjRBa2hy721Y1A1yDLUwot'; 
+    $apiSecret = ''; 
 
     $api = new Api($apiKey, $apiSecret);
 
