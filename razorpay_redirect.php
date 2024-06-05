@@ -92,10 +92,37 @@ function addPaymentData($data, $reciptId ,$orderId) {
 }
 
 
+ function verifyPayment($data){
+    
+    $apiKey = 'rzp_live_Mve4wgbJgNAKwD'; 
+    $apiSecret = 'Z1bjRBa2hy721Y1A1yDLUwot'; 
+    
+    $order_id = $data['razorpay_order_id'];
+    $razorpay_payment_id = $data['razorpay_payment_id'];
+    $razorpay_signature = $data['razorpay_signature'];
+    $generated_signature = hash_hmac('sha256', $order_id . '|' . $razorpay_payment_id, $apiSecret);
+
+    if ($generated_signature === $razorpay_signature) {
+        // print_r($_POST);
+        $isSucess = "Successful";
+        // echo 'Payment verified successfully';
+    } else {
+        $isSucess = "Failed";
+        // echo 'Payment verification failed';
+    }
+    $sql = "UPDATE `payment_data` SET `payment_status` = '$isSucess' WHERE `payment_data`.`order_id` = '$order_id'";
+    $result = executeQuery($sql);
+    // print_r($result);
+    return $isSucess;
+ }
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     // Capture data from the frontend
     $data = json_decode(file_get_contents("php://input"), true);
-    // print_r($data);die();
+    $flag = $data['flag'];
+    if ($flag === "generateOrderId"){
+        
     $amount = $data['amount'] * 100;
     $mobile = $data['mobile'];
     $reciptId = 'rcptid_'. uniqid();
@@ -108,13 +135,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     ];
     $res = sendOrderDetails($orderData,$mobile);
     $idAddedToDb = addPaymentData($data,$reciptId,$res['orderId']);
-    // print_r($idAddedToDb);
-    // if ($idAddedToDb === TRUE){
         $res['email'] = $data['email'];
         echo json_encode($res);
-    // }else {
-        // echo json_encode($idAddedToDb);
-    // }
+
+    }else if ($flag === 'verifyPayment'){
+        $res = verifyPayment($data);
+        echo $res;
+
+    }
+    // print_r($data);die();
 }
 
 ?>
